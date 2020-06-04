@@ -5,7 +5,7 @@ const ERROR_CODES = {
 }
 
 
-/**
+/** 
  * @param {array} states
  * @param {function} onDone, a function to call when everything is done with the final result!
  */ 
@@ -18,7 +18,6 @@ function getProcessingPage(states, onDone){
             setTimeout(() => { // recursive call
                 getProcessingPage(states, onDone) //call the same function with the new states array, pass same callback function
             }, 2000)
-
         } 
         else if (nextState.state === 'success') {
             const response = { title: 'Order complete', message: null }
@@ -28,14 +27,27 @@ function getProcessingPage(states, onDone){
             const response= { title: 'Error page', message: (ERROR_CODES[nextState.errorCode] || null) }
             onDone(response); 
         }
-    }  
+    } else {
+        // do something here
+        const response = 'Error with dataset'
+        onDone(response)
+    }
 }
 
-let testData = [{ state: 'processing' }, { state: 'error', errorCode: 'NO_STOCK' }];
+
+let testData = [{ state: 'processing' }, { state: 'error' , errorCode: 'NO_STOCK'}];
+// testData = [{ state: 'processing' }, { state: 'error' , errorCode: 'INCORRECT_DETAILS'}];
+// testData = [{ state: 'error' , errorCode: 'NO_STOCK'}];
+// testData = [];
+// testData = [{ state: 'processing' }];
+// testData = [{ state: 'success' }];
+// testData = [{ state: 'processing' }, { state: 'success' }];
+// testData = [{ state: 'processing' }, { state: 'error' , errorCode: null }];
+// testData = [{ state: 'processing' }, { state: 'error' , errorCode: undefined }];
 
 
-getProcessingPage(testData, function (response){
-    console.log(response)
+getProcessingPage(testData, (response) => {
+    console.log(`- result ${JSON.stringify(response)}`)
 });
 
 
